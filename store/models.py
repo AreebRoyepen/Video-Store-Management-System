@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Media(models.Model):
+class Product(models.Model):
 
 	ID = models.CharField(max_length = 120, primary_key=True)
 	mtype = models.CharField(max_length = 120)
@@ -21,10 +21,20 @@ class Media(models.Model):
 
 class Payment(models.Model):
 	username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-	ID = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='+')
-	price = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='+')
+	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
+	price = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
 
-class Booked(models.Model):
-	ID = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='+')
+class BookedProduct(models.Model):
+	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
 	username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-	#returnBy = getDateForWhenToReturnTo()
+	returnBy = models.DateField(auto_now=False)
+
+class Client(models.Model):
+	name = models.CharField(max_length = 120)
+	surname =models.CharField(max_length = 120)
+	IdNumber = models.CharField(max_length = 20)
+	contactNumber = models.CharField(max_length = 20)
+	email = models.EmailField(max_length = 120)
+	address = models.CharField(max_length = 120)
+	username = models.CharField(max_length = 120)
+	password = models.CharField(max_length = 120)
