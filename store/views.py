@@ -9,3 +9,9 @@ def about(request):
 
 def login(request):
 	return render(request,"store/login.html")
+
+def register(request):
+	return render(request,"store/register.html")
+
+def book(request):
+	return render(request,"store/book.html")
