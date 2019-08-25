@@ -7,7 +7,8 @@ from imdb import IMDb
 write_file = open("raw.tsv","w")
 
 #Write headings
-write_file.write("TitleID\tMovie Title\tGenres\tRuntime\tAdult\tURL\tDESCRIPTION\n")
+#write_file.write("TitleID\tMovie Title\tGenres\tRuntime\tAdult\tURL\tDESCRIPTION\n")
+write_file.write("TitleID\tURL\n")
 
 #Read from file
 read_file = open("titleID.txt","r")
@@ -24,10 +25,6 @@ def posterURL(titleID):
 
     #Yify URL
     url = "https://img.yts.lt/assets/images/movies/"+name+"_"+str(year)+"/large-cover.jpg"
-
-    r = requests.get(url)
-    if(r.status_code == 404):
-    	print(titleID)
     
     return url
 
@@ -127,10 +124,17 @@ def scraper(titleID):
     runtime = movieRuntime(titleID,page)#Returns String of time Format: 1h 35min
 
     #Concatenate Everything for a Movie
-    Massive_String = titleID+"\t"+movieTitle+"\t"+genre+"\t"+runtime+"\t"+adult+"\t"+pic_url+"\t"+text+"\n"
+    #Massive_String = titleID+"\t"+movieTitle+"\t"+genre+"\t"+runtime+"\t"+adult+"\t"+pic_url+"\t"+text+"\n"
+    Massive_String = titleID+"\t"+pic_url+"\n"
 
     #Finally write line to file
     write_file.write(Massive_String)
+
+print(posterURL("tt0468569"))
+print(posterURL("tt0111161"))
+print(posterURL("tt2283336"))
+
+
 
 #Make Function Call
 movies = read_file.read()
