@@ -18,17 +18,6 @@ class Product(models.Model):
 	def __str__(self):
 		return '{}'.format(self.originalTitle)
 
-
-class Payment(models.Model):
-	username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
-	price = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
-
-class BookedProduct(models.Model):
-	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
-	username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-	returnBy = models.DateField(auto_now=False)
-
 class Client(models.Model):
 	name = models.CharField(max_length = 120)
 	surname =models.CharField(max_length = 120)
@@ -38,3 +27,18 @@ class Client(models.Model):
 	address = models.CharField(max_length = 120)
 	username = models.CharField(max_length = 120)
 	password = models.CharField(max_length = 120)
+
+	def __str__(self):
+		return '{}'.format(self.name)
+
+		
+class Payment(models.Model):
+	username = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='+')
+	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
+	price = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
+
+class BookedProduct(models.Model):
+	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
+	username = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='+')
+	returnBy = models.DateField(auto_now=False)
+
