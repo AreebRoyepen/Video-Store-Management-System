@@ -31,14 +31,20 @@ class Client(models.Model):
 	def __str__(self):
 		return '{}'.format(self.name)
 
-		
+
 class Payment(models.Model):
 	username = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='+')
 	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
 	price = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
 
+	def __str__(self):
+		return '{}'.format(self.username)
+
 class BookedProduct(models.Model):
 	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
 	username = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='+')
 	returnBy = models.DateField(auto_now=False)
+
+	def __str__(self):
+		return '{}'.format(self.ID)
 
