@@ -14,7 +14,11 @@ for i in range(0, len(movies)):
     lst = movies[i].split("\t")
 
     id = lst[0]
-    poster = lst[1]
 
-    relativePath = ""       # dean to explain this part
-    Product.objects.filter(originalTitle = id).update(poster = relativePath+id)
+    relativePath = "/store/static/images/"+id+".jpg"      # dean to explain this part
+    print(relativePath)
+    
+    p = Product.objects.get(ID = id)
+    print(p)
+    p.poster = relativePath
+    p.save()
