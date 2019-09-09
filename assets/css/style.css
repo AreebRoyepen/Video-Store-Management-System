@@ -4,7 +4,7 @@ body {
     height: 100%;
     width: 100%;
     font-family: 'Poppins', arial;
-    background: url('homePoster3.jpg') 50% 0 no-repeat fixed;
+    background: url('homePoster3.jpg') ;
     background-size: cover;
 }
 
