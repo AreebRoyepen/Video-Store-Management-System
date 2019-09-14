@@ -132,6 +132,11 @@ figure {
     color: #d3d3d3;
 }
 
+.card-footer {
+    padding-bottom: 0rem;
+    padding-top: 0rem;
+    padding-left: 0rem;
+}
 
 /*
 Extra small (xs) devices (portrait phones, less than 576px)

@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
+html,
+body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Poppins', arial;
+    background: url('registration page/img/homePoster3.jpg');
+    background-size: cover;
+}
+
+.navbar {
+    padding: .5rem;
+    background-color: #131313 !important;
+}
+
+.navbar-nav li {
+    padding-right: 20px;
+}
+
+.nav-link {
+    font-size: 1.0em !important;
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: 100%;
+}
+
+.dropdown-menu {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.social a {
+    font-size: 4.5em;
+    padding: 5rem;
+}
+
+.fa-facebook {
+    color: #d3d3d3;
+}
+
+.fa-twitter {
+    color: #dfdede;
+}
+
+.fa-instagram {
+    color: #d3d3d3;
+}
+
+.fa-facebook:hover,
+.fa-twitter:hover,
+.fa-instagram:hover {
+    color: #ffffff;
+}
+
+footer {
+    background-color: #000000;
+    color: #d5d5d5;
+    padding-top: 2rem;
+}
+
+hr.light {
+    border-top: 1px solid #d5d5d5;
+    width: 75%;
+    margin-top: .8rem;
+    margin-bottom: 1rem;
+}
+
+
+/*---Media Queries --*/
+
+@media (max-width: 992px) {}
+
+@media (max-width: 768px) {}
+
+@media (max-width: 576px) {}
+
+
+/*---Firefox Bug Fix --*/
+
+.carousel-item {
+    transition: -webkit-transform 0.5s ease;
+    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+}
+
+
+/*--- Fixed Background Image --*/
+
+figure {
+    position: relative;
+    width: 100%;
+    height: 60%;
+    margin: 0!important;
+}
+
+.fixed-wrap {
+    clip: rect(0, auto, auto, 0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#fixed {
+    background-image: url('img/mac.png');
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+
+/*--- Bootstrap Padding Fix --*/
+
+[class*="col-"] {
+    padding: 1rem;
+}
+
+.controls-top .btn-floating {
+    color: #d3d3d3;
+}
+
+
+/*
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/
+
+.accordion {
+    padding-top: 3em !important;
+    padding-bottom: 1em !important;
+    padding-left: 3em !important;
+    padding-right: 3em !important;
+}
+
+.card-header {
+    padding: 0% !important;
+}
+
+.card-body {
+    background: #000000;
+}
+
+.card-text {
+    color: #ffffff;
+}
+
+.btn .btn-outline-light {
+    color: #ffffff;
+}
+
+#accordionExample {
+    background-color: transparent !important;
+}
+
+.btn.btn-link {
+    color: #000000;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.btn.btn-link:link {
+    text-decoration: none;
+}
+
+.btn.btn-link:visited {
+    text-decoration: none;
+}
+
+.btn.btn-link:hover {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+}
+
+.btn.btn-link:active {
+    text-decoration: none;
+}
+
+.controls-top .btn-floating .fa.fa fa-chevron-left .fa.fa fa-chevron-right {
+    position: absolutle;
+    right: 40px;
+    transform: translateY(-50%);
+}
+
+.modal-backdrop {
+    display: none;
+}
+
+.modal-dialog {
+    margin: 2px auto;
+    z-index: 1100 !important;
+    height: 80%;
+}
+
+.modal-content {
+    /* 80% of window height */
+    height: 80%;
+}
+
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: calc(100% - 120px);
+    overflow-y: none;
+}
+
+#myModal {
+    margin-top: 1.5rem;
+}
+
+.modal-lg {
+    max-width: 80%;
+    height: 700px;
+}
+
+.card-img-modal {
+    margin-left: 5.5rem;
+}
+
+.modal-footer {
+    padding-bottom: 0rem;
+}
