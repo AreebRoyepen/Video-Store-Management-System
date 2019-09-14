@@ -10,8 +10,8 @@ class Product(models.Model):
 	isAdult = models.BooleanField()
 	runtime = models.CharField(max_length = 120)
 	genres = models.CharField(max_length = 120)
-	poster = models.CharField(max_length = 120)
-	description = models.TextField(max_length = 120)
+	poster = models.ImageField(blank=True, null = True)
+	description = models.TextField(max_length = 300)
 	isBooked = models.BooleanField()
 	price = models.DecimalField(decimal_places = 2 , max_digits=10000)
 

@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Project Video Store</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <link rel="stylesheet" type='text/css' media ='all' href="{% static 'css/style.css' %}" > 
     <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css">
@@ -30,17 +30,30 @@
         </form>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+              <a class="nav-link" href=""><i class="fas fa-home"></i> Home</a>
             </li>
             <li class="nav-item">
+              {%if user.is_authenticated %}
               <a class="nav-link" href="#"> Your Rentals</a>
+              {% else %}
+              <a class="nav-link" href="login"> Sign in</a>
+              {% endif %}
             </li>
+            <li class="nav-item">
+              {% if user.is_authenticated == False %}
+              <a class="nav-link" href="register"> Register</a>
+              {% endif%}
+            </li>>
             <li class="nav-item dropdown">
+              {% if user.is_authenticated %}
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"><i class="fas fa-user-circle"></i>  Hi {{ user.username }}!</a>
+              {% else %}
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"><i class="fas fa-user-circle"></i> User</a>
+              {% endif%}
+                {% if user.is_authenticated %}
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="/login">Sign in</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/register">Registered?</a>
+                  <a class="dropdown-item" href="logout">Sign out</a>
+                {% endif %}
                 </div>
             </li>
           </ul>
@@ -51,7 +64,7 @@
     <div class="container-fluid my-container">
         <!--- Image Slider: This is the image slider below the navbar. NB: these are static images! Make sure to include these particular images-->
         <div class="row my-row-mainImgSlider">
-            <div id="slides" class="carousel slide" data-ride="carousel">
+            <div id="slides" class="carousel slide container-fluid" data-ride="carousel">
               <ul class="carousel-indicators">
                 <li data-target="#slides" data-slide-to="0" class="active"></li>
                 <li data-target="#slides" data-slide-to="1"></li>
@@ -146,7 +159,7 @@
                 <hr class="my-3">
 
                 <!--Carousel Wrapper-->
-                <div id="multi-item1" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
+                <div id="multi-item1" class="carousel slide carousel-multi-item" data-ride="carousel">
 
                 <!--Controls-->
                 <div class="controls-top">
@@ -160,229 +173,82 @@
 
                   <!--First slide-->
                   <div class="carousel-item active">
-
                     <div class="row">
+                      {% for movie in latest_slide_1 %}
                       <div class="col-md-3">
                         <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
+                            <p class="card-text">{{ movie.description }}</p>
                             <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
                             <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
                           </div>
                         </div>
                       </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
+                    {% endfor %}
                     </div>
-
                   </div>
                   <!--/.First slide-->
 
                   <!--Second slide-->
                   <div class="carousel-item">
-
                     <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg'  %}"alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        {% for movie in latest_slide_2 %}
+                        <div class="col-md-3">
+                          <div class="card mb-1">
+                            <img class="card-img-top" src="/media/{{movie.poster}}"
+                             alt="Card image cap">
+                            <div class="card-body">
+                              <p class="card-text">{{ movie.description }}</p>
+                              <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                              <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
+                      {% endfor %}
                     </div>
-
                   </div>
                   <!--/.Second slide-->
 
                   <!--Third slide-->
                   <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                      <div class="row">
+                          {% for movie in latest_slide_3 %}
+                          <div class="col-md-3">
+                            <div class="card mb-1">
+                              <img class="card-img-top" src="/media/{{movie.poster}}"
+                               alt="Card image cap">
+                              <div class="card-body">
+                                <p class="card-text">{{ movie.description }}</p>
+                                <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
+                        {% endfor %}
                       </div>
                     </div>
-
-                  </div>
                   <!--/.Third slide-->
 
                   <!--Forth slide-->
                   <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                      <div class="row">
+                          {% for movie in latest_slide_4 %}
+                          <div class="col-md-3">
+                            <div class="card mb-1">
+                              <img class="card-img-top" src="/media/{{movie.poster}}"
+                               alt="Card image cap">
+                              <div class="card-body">
+                                <p class="card-text">{{ movie.description }}</p>
+                                <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}"alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
+                        {% endfor %}
                       </div>
                     </div>
-
-                  </div>
-                  <!--/.Fourth slide-->
-
-                </div>
                 <!--/.Slides-->
 
               </div>
@@ -399,244 +265,99 @@
                 <hr class="my-3">
 
                 <!--Carousel Wrapper-->
-                <div id="multi-item1" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
+                <div id="multi-item2" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
 
                 <!--Controls-->
                 <div class="controls-top">
-                  <a class="btn-floating" href="#multi-item1" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
-                  <a class="btn-floating" href="#multi-item1" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+                  <a class="btn-floating" href="#multi-item2" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                  <a class="btn-floating" href="#multi-item2" data-slide="next"><i class="fa fa-chevron-right"></i></a>
                 </div>
                 <!--/.Controls-->
 
                 <!--Slides-->
                 <div class="carousel-inner" role="listbox">
 
-                  <!--First slide-->
-                  <div class="carousel-item active">
+                    <div class="carousel-inner" role="listbox">
 
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--First slide-->
+                        <div class="carousel-item active">
+                          <div class="row">
+                            {% for movie in action_slide_1 %}
+                            <div class="col-md-3">
+                              <div class="card mb-1">
+                                <img class="card-img-top" src="/media/{{movie.poster}}" 
+                                alt="Card image cap">
+                                <div class="card-body">
+                                  <p class="card-text">{{ movie.description }}</p>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                </div>
+                              </div>
+                            </div>
+                          {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.First slide-->
+      
+                        <!--Second slide-->
+                        <div class="carousel-item">
+                          <div class="row">
+                              {% for movie in action_slide_2 %}
+                              <div class="col-md-3">
+                                <div class="card mb-1">
+                                  <img class="card-img-top" src="/media/{{movie.poster}}"
+                                   alt="Card image cap">
+                                  <div class="card-body">
+                                    <p class="card-text">{{ movie.description }}</p>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.Second slide-->
+      
+                        <!--Third slide-->
+                        <div class="carousel-item">
+                            <div class="row">
+                                {% for movie in action_slide_3 %}
+                                <div class="col-md-3">
+                                  <div class="card mb-1">
+                                    <img class="card-img-top" src="/media/{{movie.poster}}"
+                                     alt="Card image cap">
+                                    <div class="card-body">
+                                      <p class="card-text">{{ movie.description }}</p>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.Third slide-->
+      
+                        <!--Forth slide-->
+                        <div class="carousel-item">
+                            <div class="row">
+                                {% for movie in action_slide_4 %}
+                                <div class="col-md-3">
+                                  <div class="card mb-1">
+                                    <img class="card-img-top" src="/media/{{movie.poster}}"
+                                     alt="Card image cap">
+                                    <div class="card-body">
+                                      <p class="card-text">{{ movie.description }}</p>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.First slide-->
-
-                  <!--Second slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image8Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg'  %}"alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Second slide-->
-
-                  <!--Third slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg'%}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg'  %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Third slide-->
-
-                  <!--Forth slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src= "{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src= "{% static 'img/image1Car.jpg'%}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Fourth slide-->
-
-                </div>
-                <!--/.Slides-->
+                      <!--/.Slides-->
 
               </div>
               <!--/.Carousel Wrapper-->
@@ -652,244 +373,99 @@
                 <hr class="my-3">
 
                 <!--Carousel Wrapper-->
-                <div id="multi-item1" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
+                <div id="multi-item3" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
 
                 <!--Controls-->
                 <div class="controls-top">
-                  <a class="btn-floating" href="#multi-item1" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
-                  <a class="btn-floating" href="#multi-item1" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+                  <a class="btn-floating" href="#multi-item3" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                  <a class="btn-floating" href="#multi-item3" data-slide="next"><i class="fa fa-chevron-right"></i></a>
                 </div>
                 <!--/.Controls-->
 
                 <!--Slides-->
                 <div class="carousel-inner" role="listbox">
 
-                  <!--First slide-->
-                  <div class="carousel-item active">
+                    <div class="carousel-inner" role="listbox">
 
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--First slide-->
+                        <div class="carousel-item active">
+                          <div class="row">
+                            {% for movie in comedy_slide_1 %}
+                            <div class="col-md-3">
+                              <div class="card mb-1">
+                                <img class="card-img-top" src="/media/{{movie.poster}}" 
+                                alt="Card image cap">
+                                <div class="card-body">
+                                  <p class="card-text">{{ movie.description }}</p>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                </div>
+                              </div>
+                            </div>
+                          {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.First slide-->
+      
+                        <!--Second slide-->
+                        <div class="carousel-item">
+                          <div class="row">
+                              {% for movie in comedy_slide_2 %}
+                              <div class="col-md-3">
+                                <div class="card mb-1">
+                                  <img class="card-img-top" src="/media/{{movie.poster}}"
+                                   alt="Card image cap">
+                                  <div class="card-body">
+                                    <p class="card-text">{{ movie.description }}</p>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.Second slide-->
+      
+                        <!--Third slide-->
+                        <div class="carousel-item">
+                            <div class="row">
+                                {% for movie in comedy_slide_3 %}
+                                <div class="col-md-3">
+                                  <div class="card mb-1">
+                                    <img class="card-img-top" src="/media/{{movie.poster}}"
+                                     alt="Card image cap">
+                                    <div class="card-body">
+                                      <p class="card-text">{{ movie.description }}</p>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.Third slide-->
+      
+                        <!--Forth slide-->
+                        <div class="carousel-item">
+                            <div class="row">
+                                {% for movie in comedy_slide_4 %}
+                                <div class="col-md-3">
+                                  <div class="card mb-1">
+                                    <img class="card-img-top" src="/media/{{movie.poster}}"
+                                     alt="Card image cap">
+                                    <div class="card-body">
+                                      <p class="card-text">{{ movie.description }}</p>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.First slide-->
-
-                  <!--Second slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg'  %}"alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg'  %}"alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Second slide-->
-
-                  <!--Third slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src= "{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Third slide-->
-
-                  <!--Forth slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg'  %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Fourth slide-->
-
-                </div>
-                <!--/.Slides-->
+                      <!--/.Slides-->
 
               </div>
               <!--/.Carousel Wrapper-->
@@ -905,12 +481,12 @@
                 <hr class="my-3">
 
                 <!--Carousel Wrapper-->
-                <div id="multi-item1" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
+                <div id="multi-item4" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
 
                 <!--Controls-->
                 <div class="controls-top">
-                  <a class="btn-floating" href="#multi-item1" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
-                  <a class="btn-floating" href="#multi-item1" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+                  <a class="btn-floating" href="#multi-item4" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                  <a class="btn-floating" href="#multi-item4" data-slide="next"><i class="fa fa-chevron-right"></i></a>
                 </div>
                 <!--/.Controls-->
 
@@ -918,231 +494,87 @@
                 <div class="carousel-inner" role="listbox">
 
                   <!--First slide-->
-                  <div class="carousel-item active">
+                  <div class="carousel-inner" role="listbox">
 
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                      <!--First slide-->
+                      <div class="carousel-item active">
+                        <div class="row">
+                          {% for movie in family_slide_1 %}
+                          <div class="col-md-3">
+                            <div class="card mb-1">
+                              <img class="card-img-top" src="/media/{{movie.poster}}" 
+                              alt="Card image cap">
+                              <div class="card-body">
+                                <p class="card-text">{{ movie.description }}</p>
+                                <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                              </div>
+                            </div>
                           </div>
+                        {% endfor %}
                         </div>
                       </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
+                      <!--/.First slide-->
+    
+                      <!--Second slide-->
+                      <div class="carousel-item">
+                        <div class="row">
+                            {% for movie in family_slide_2 %}
+                            <div class="col-md-3">
+                              <div class="card mb-1">
+                                <img class="card-img-top" src="/media/{{movie.poster}}"
+                                 alt="Card image cap">
+                                <div class="card-body">
+                                  <p class="card-text">{{ movie.description }}</p>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                </div>
+                              </div>
+                            </div>
+                          {% endfor %}
                         </div>
                       </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                      <!--/.Second slide-->
+    
+                      <!--Third slide-->
+                      <div class="carousel-item">
+                          <div class="row">
+                              {% for movie in family_slide_3 %}
+                              <div class="col-md-3">
+                                <div class="card mb-1">
+                                  <img class="card-img-top" src="/media/{{movie.poster}}"
+                                   alt="Card image cap">
+                                  <div class="card-body">
+                                    <p class="card-text">{{ movie.description }}</p>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                      <!--/.Third slide-->
+    
+                      <!--Forth slide-->
+                      <div class="carousel-item">
+                          <div class="row">
+                              {% for movie in family_slide_4 %}
+                              <div class="col-md-3">
+                                <div class="card mb-1">
+                                  <img class="card-img-top" src="/media/{{movie.poster}}"
+                                   alt="Card image cap">
+                                  <div class="card-body">
+                                    <p class="card-text">{{ movie.description }}</p>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
                           </div>
                         </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.First slide-->
-
-                  <!--Second slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image8Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Second slide-->
-
-                  <!--Third slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Third slide-->
-
-                  <!--Forth slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Fourth slide-->
-
-                </div>
-                <!--/.Slides-->
+                    <!--/.Slides-->
 
               </div>
               <!--/.Carousel Wrapper-->
@@ -1158,245 +590,99 @@
                 <hr class="my-3">
 
                 <!--Carousel Wrapper-->
-                <div id="multi-item1" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
+                <div id="multi-item5" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
 
                 <!--Controls-->
                 <div class="controls-top">
-                  <a class="btn-floating" href="#multi-item1" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
-                  <a class="btn-floating" href="#multi-item1" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+                  <a class="btn-floating" href="#multi-item5" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                  <a class="btn-floating" href="#multi-item5" data-slide="next"><i class="fa fa-chevron-right"></i></a>
                 </div>
                 <!--/.Controls-->
 
                 <!--Slides-->
                 <div class="carousel-inner" role="listbox">
 
-                  <!--First slide-->
-                  <div class="carousel-item active">
+                    <div class="carousel-inner" role="listbox">
 
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--First slide-->
+                        <div class="carousel-item active">
+                          <div class="row">
+                            {% for movie in horror_slide_1 %}
+                            <div class="col-md-3">
+                              <div class="card mb-1">
+                                <img class="card-img-top" src="/media/{{movie.poster}}" 
+                                alt="Card image cap">
+                                <div class="card-body">
+                                  <p class="card-text">{{ movie.description }}</p>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                </div>
+                              </div>
+                            </div>
+                          {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg'%}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.First slide-->
+      
+                        <!--Second slide-->
+                        <div class="carousel-item">
+                          <div class="row">
+                              {% for movie in horror_slide_2 %}
+                              <div class="col-md-3">
+                                <div class="card mb-1">
+                                  <img class="card-img-top" src="/media/{{movie.poster}}"
+                                   alt="Card image cap">
+                                  <div class="card-body">
+                                    <p class="card-text">{{ movie.description }}</p>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
                           </div>
                         </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.Second slide-->
+      
+                        <!--Third slide-->
+                        <div class="carousel-item">
+                            <div class="row">
+                                {% for movie in horror_slide_3 %}
+                                <div class="col-md-3">
+                                  <div class="card mb-1">
+                                    <img class="card-img-top" src="/media/{{movie.poster}}"
+                                     alt="Card image cap">
+                                    <div class="card-body">
+                                      <p class="card-text">{{ movie.description }}</p>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image4Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                        <!--/.Third slide-->
+      
+                        <!--Forth slide-->
+                        <div class="carousel-item">
+                            <div class="row">
+                                {% for movie in horror_slide_4 %}
+                                <div class="col-md-3">
+                                  <div class="card mb-1">
+                                    <img class="card-img-top" src="/media/{{movie.poster}}"
+                                     alt="Card image cap">
+                                    <div class="card-body">
+                                      <p class="card-text">{{ movie.description }}</p>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
+                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.First slide-->
-
-                  <!--Second slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Second slide-->
-
-                  <!--Third slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image1Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-1">
-                          <img class="card-img-top" src="{% static 'img/image5Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Third slide-->
-
-                  <!--Forth slide-->
-                  <div class="carousel-item">
-
-                    <div class="row">
-                      <div class="col-md-3">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image3Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image2Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image7Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3 clearfix d-none d-md-block">
-                        <div class="card mb-2">
-                          <img class="card-img-top" src="{% static 'img/image6Car.jpg' %}" alt="Card image cap">
-                          <div class="card-body">
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                              card's content.</p>
-                            <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                            <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                  <!--/.Fourth slide-->
-
-                </div>
-                <!--/.Slides-->
-
+                      <!--/.Slides-->
               </div>
               <!--/.Carousel Wrapper-->
 
@@ -1412,13 +698,26 @@
 
 
 
-
+<!--- Connect -->
+<div class="container-fluid padding">
+    <div class="row text-center padding">
+      <div class="col-12">
+        <h2 style="color:#ebebeb; font-size:250%;"> Connect </h2>
+      </div>
+      <div class="col-12 social padding">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
+     </div>
+     </div>   
+    
 
 
 
     <!--- Footer -->
-    <footer>
-      <div class="container-fluid padding">
+    <footer class="container-fluid">
+      <div class="container-fluid padding" >
       <div class="row text-center">
         <div class="col-md-4">
           <img src="{% static 'img/ProjLogo-01.png' %}">
@@ -1450,6 +749,8 @@
           <hr class="light">
           <h5>&copy; project.com</h5>
         </div>
+      </div>
+      </div>>
     </footer>
 </body>
 </html>
