@@ -42,9 +42,11 @@ class Payment(models.Model):
 
 class BookedProduct(models.Model):
 	ID = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+')
-	username = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='+')
-	returnBy = models.DateField(auto_now=False)
+	username = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+	returnBy = models.DateField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.ID)
+
+
 

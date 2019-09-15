@@ -9,7 +9,8 @@ urlpatterns = [
     path('book/', views.book, name = "store-book"),
     path('register/', views.user_register, name='user_register'), # maybe change
     path('login/', views.user_login, name='user_login'),
-    path('logout/', views.user_logout, name='user_logout')
+    path('logout/', views.user_logout, name='user_logout'),
+    path('rentals/', views.user_rentals, name='user_rentals'),
 
 
 ]
