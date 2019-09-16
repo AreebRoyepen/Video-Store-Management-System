@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-    <link rel="stylesheet" type='text/css'  href="{% static 'css/style .css' %}" > 
+    <link rel="stylesheet" type='text/css'  href="{% static 'css/style.css' %}" > 
     <link rel="stylesheet" href="https://m.w3newbie.com/you-tube.css">
 </head>
 
@@ -19,13 +19,14 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark and bg-dark sticky-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href=""><img src="{% static 'img/ProjLogo-01.png' %}"></a>
+        <a class="navbar-brand" href="/"><img src="{% static 'img/ProjLogo-01.png' %}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-        <form class="form-inline my-4 my-lg-0 mx-lg-auto">
-          <input class="form-control mr-sm-3" type="search" placeholder="Search movies" aria-label="Search">
+        <form class="form-inline my-4 my-lg-0 mx-lg-auto" action="{% url 'store:store-home'%}" method="GET">
+          {% csrf_token %}
+          <input class="form-control mr-sm-3" type="search" placeholder="Search movies" aria-label="Search" name='search' >
           <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> Search</button>
         </form>
           <ul class="navbar-nav ml-auto">
@@ -149,6 +150,67 @@
 
       </div>
 
+      {% if search_list %}
+             <!--Fifth Carousel: Search Results-->
+             <div class="row my-row-carousel5">
+              <div class="container-fluid my-3">
+                  <h3 style="color:#ebebeb; font-size:220%;"> Search Results </h3>
+                  <hr class="my-3">
+  
+                  <!--Carousel Wrapper-->
+                  <div id="multi-item6" class="carousel slide carousel-multi-item" data-ride="carousel" data-interval="false">
+  
+                  <!--Controls-->
+                  <div class="controls-top">
+                    <a class="btn-floating" href="#multi-item6" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                    <a class="btn-floating" href="#multi-item6" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+                  </div>
+                  <!--/.Controls-->
+  
+                  <!--Slides-->
+                  <div class="carousel-inner" role="listbox">
+  
+                      <div class="carousel-inner" role="listbox">
+  
+                        <div class="carousel-item active">
+                          <div class="row">
+                            {% for movie in search_list%}
+                            <div class="col-md-3">
+                              <div class="card mb-1">
+                                <img class="card-img-top" src="/media/{{movie.poster}}" 
+                                alt="Card image cap">
+                                <div class="card-body">
+                                    <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
+                                        <div class="card-footer">
+                                      <form action="{% url 'store:store-home' %}" method="POST">
+                                          {% csrf_token %}
+                                          <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                          {% if user.is_authenticated%}
+                                          <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                          {% endif %}                                        
+                                          <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                          <input name="movie_id" value="{{movie.ID}}" hidden="" >
+      
+                                        </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          {% endfor %}
+                          </div>
+                        </div>
+                          <!--/.First slide-->
+      
+                        <!--/.Slides-->
+                </div>
+                <!--/.Carousel Wrapper-->
+  
+            </div>
+          </div>
+          <!--End of Fifth carousel-->        
+      {% endif %}
+
+
         <!--First Carousel: Latest Releases-->
         <div class="row my-row-carousel1">
             <div class="container-fluid my-3">
@@ -177,8 +239,8 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
-                            <div class="card-footer">
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
+                                  <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
                                     <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
@@ -207,8 +269,8 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
-                            <div class="card-footer">
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
+                                  <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
                                     <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
@@ -237,8 +299,8 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
-                            <div class="card-footer">
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
+                                  <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
                                     <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
@@ -267,8 +329,8 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
-                            <div class="card-footer">
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
+                                  <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
                                     <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
@@ -322,7 +384,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -352,7 +414,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -382,7 +444,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -412,7 +474,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -465,7 +527,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -495,7 +557,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -525,7 +587,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -555,7 +617,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -608,7 +670,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -638,7 +700,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -668,7 +730,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -698,7 +760,7 @@
                           <img class="card-img-top" src="/media/{{movie.poster}}" 
                           alt="Card image cap">
                           <div class="card-body">
-                            <p class="card-text"  >{{ movie.description }}</p>
+                              <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
                             <div class="card-footer">
                                 <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
@@ -755,8 +817,8 @@
                               <img class="card-img-top" src="/media/{{movie.poster}}" 
                               alt="Card image cap">
                               <div class="card-body">
-                                <p class="card-text"  >{{ movie.description }}</p>
-                                <div class="card-footer">
+                                  <div class="row card-body-text-row"><p class="card-text"  >{{ movie.description }}</p></div>                            
+                                  <div class="card-footer">
                                     <form action="{% url 'store:store-book' %}" method="POST">
                                         {% csrf_token %}
                                         <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
@@ -799,9 +861,9 @@
         <h2 style="color:#ebebeb; font-size:250%;"> Connect </h2>
       </div>
       <div class="col-12 social padding">
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
       </div>
      </div>
      </div>   

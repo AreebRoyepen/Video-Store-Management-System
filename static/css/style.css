@@ -249,3 +249,10 @@ Extra (xl) large devices (large desktops, 1200px and up)
     padding-top: 0rem;
     padding-left: 0rem;
 }
+
+/* .card-body-text-row {
+    height: 300px!important;
+} */
+.card-text{
+    height: 150px!important;    
+}

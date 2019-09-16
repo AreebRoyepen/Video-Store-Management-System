@@ -43,16 +43,31 @@ def home(request):
 
     horror_slide_1 = Product.objects.filter(genres__icontains='Horror', isBooked=False)[0:4]
 
+    search_list = []
 
-    args = { 
+
+
+    search = request.GET.get('search',"")
+    if search!= "":
+        searched_movies = Product.objects.filter(originalTitle__contains=search)
+        for x in searched_movies:
+            search_list.append(x)
+        args = { 
+        'search_list':search_list,
         'latest_slide_1':latest_slide_1 ,'latest_slide_2':latest_slide_2,'latest_slide_3':latest_slide_3,'latest_slide_4':latest_slide_4,
         'action_slide_1':action_slide_1 ,'action_slide_2':action_slide_2,'action_slide_3':action_slide_3,'action_slide_4':action_slide_4,
         'comedy_slide_1':comedy_slide_1 ,'comedy_slide_2':comedy_slide_2,'comedy_slide_3':comedy_slide_3,'comedy_slide_4':comedy_slide_4,
         'family_slide_1':family_slide_1 ,'family_slide_2':family_slide_2,'family_slide_3':family_slide_3,'family_slide_4':family_slide_4,
-        'horror_slide_1':horror_slide_1
+        'horror_slide_1':horror_slide_1,
         }
-
-
+    else:
+        args = { 
+        'latest_slide_1':latest_slide_1 ,'latest_slide_2':latest_slide_2,'latest_slide_3':latest_slide_3,'latest_slide_4':latest_slide_4,
+        'action_slide_1':action_slide_1 ,'action_slide_2':action_slide_2,'action_slide_3':action_slide_3,'action_slide_4':action_slide_4,
+        'comedy_slide_1':comedy_slide_1 ,'comedy_slide_2':comedy_slide_2,'comedy_slide_3':comedy_slide_3,'comedy_slide_4':comedy_slide_4,
+        'family_slide_1':family_slide_1 ,'family_slide_2':family_slide_2,'family_slide_3':family_slide_3,'family_slide_4':family_slide_4,
+        'horror_slide_1':horror_slide_1,
+        }
 
 
 
