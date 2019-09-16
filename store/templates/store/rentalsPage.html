@@ -16,6 +16,8 @@
 
 </head>
 
+<body>
+
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-dark and bg-dark sticky-top">
 	<div class="container-fluid">
@@ -36,7 +38,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"><i class="fas fa-user-circle"></i>  Hi {{ user.username }}!</a>
         </li>
 				<li class="nav-item">
-            <a class="nav-link" href="logout"><i class="fas fa-home"></i> Sign out</a>
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Sign out</a>
           </li>
 			</ul>
 		</div>
@@ -65,28 +67,24 @@
         </div>
       </div>
       {% empty %}
-    <p>You currently have no movies rented.</p>
+      <h1 style= "color:white; margin-left: 30%; margin-top: 10%; margin-bottom: 10%"> You currently have no movies rented</h1>
      {% endfor %}
   </div>
 
 
-
-
-
-
 <!--- Connect -->
 <div class="container-fluid padding">
-<div class="row text-center padding">
-  <div class="col-12">
-    <h2 style="color:#ebebeb; font-size:250%;"> Connect </h2>
-  </div>
-  <div class="col-12 social padding">
-    <a href="#"><i class="fab fa-facebook"></i></a>
-    <a href="#"><i class="fab fa-instagram"></i></a>
-    <a href="#"><i class="fab fa-twitter"></i></a>
-  </div>
- </div>
- </div>   
+  <div class="row text-center padding">
+    <div class="col-12">
+      <h2 style="color:#ebebeb; font-size:250%;"> Connect </h2>
+    </div>
+    <div class="col-12 social padding">
+      <a href="https://www.facebook.com"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.twitter.com"><i class="fab fa-twitter"></i></a>
+    </div>
+   </div>
+   </div>   
 
 <!--- Footer -->
 <footer>

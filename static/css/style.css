@@ -58,6 +58,7 @@ footer {
     background-color: #000000;
     color: #d5d5d5;
     padding-top: 2rem;
+    bottom: 0;
 }
 
 hr.light {
