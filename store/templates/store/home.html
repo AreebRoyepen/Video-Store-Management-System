@@ -19,7 +19,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark and bg-dark sticky-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="{% static 'img/ProjLogo-01.png' %}"></a>
+        <a class="navbar-brand" href=""><img src="{% static 'img/ProjLogo-01.png' %}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -30,30 +30,27 @@
         </form>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href=""><i class="fas fa-home"></i> Home</a>
+              <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
             </li>
             <li class="nav-item">
               {%if user.is_authenticated %}
-              <a class="nav-link" href="rentals"> Your Rentals</a>
+              <a class="nav-link" href="rentals"><i class="fas fa-video"></i>
+                Your Rentals</a>
               {% else %}
-              <a class="nav-link" href="login"> Sign in</a>
+              <a class="nav-link" href="login"><i class="fas fa-sign-in-alt"></i> Sign in</a>
               {% endif %}
             </li>
             <li class="nav-item">
               {% if user.is_authenticated == False %}
-              <a class="nav-link" href="register"> Register</a>
+              <a class="nav-link" href="register"><i class="fas fa-user-plus"></i> Register</a>
               {% endif%}
             </li>>
             <li class="nav-item dropdown">
               {% if user.is_authenticated %}
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"><i class="fas fa-user-circle"></i>  Hi {{ user.username }}!</a>
-              {% else %}
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"><i class="fas fa-user-circle"></i> User</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="logout">Sign out</a>
               {% endif%}
-                {% if user.is_authenticated %}
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="logout">Sign out</a>
-                {% endif %}
                 </div>
             </li>
           </ul>
@@ -182,11 +179,16 @@
                           <div class="card-body">
                             <p class="card-text"  >{{ movie.description }}</p>
                             <div class="card-footer">
-                                <form action='book/' method="POST">
+                                <form action="{% url 'store:store-book' %}" method="POST">
                                     {% csrf_token %}
-                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit" name=movie_id value='{{ movie.id }}'> Rent</button>
-                                </form>
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
                         </div>
@@ -199,67 +201,91 @@
                   <!--Second slide-->
                   <div class="carousel-item">
                     <div class="row">
-                        {% for movie in latest_slide_2 %}
-                        <div class="col-md-3">
-                          <div class="card mb-1">
-                            <img class="card-img-top" src="/media/{{movie.poster}}"
-                             alt="Card image cap">
-                            <div class="card-body">
-                              <p class="card-text">{{ movie.description }}</p>
-                              <div class="card-footer">
-                                <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                              </div>
+                      {% for movie in latest_slide_2 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
                         </div>
-                      {% endfor %}
+                      </div>
+                    {% endfor %}
                     </div>
                   </div>
                   <!--/.Second slide-->
 
                   <!--Third slide-->
                   <div class="carousel-item">
-                      <div class="row">
-                          {% for movie in latest_slide_3 %}
-                          <div class="col-md-3">
-                            <div class="card mb-1">
-                              <img class="card-img-top" src="/media/{{movie.poster}}"
-                               alt="Card image cap">
-                              <div class="card-body">
-                                <p class="card-text">{{ movie.description }}</p>
-                                <div class="card-footer">
-                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                </div>
-                              </div>
+                    <div class="row">
+                      {% for movie in latest_slide_3 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
-                        {% endfor %}
+                        </div>
                       </div>
+                    {% endfor %}
                     </div>
+                  </div>
                   <!--/.Third slide-->
 
                   <!--Forth slide-->
                   <div class="carousel-item">
-                      <div class="row">
-                          {% for movie in latest_slide_4 %}
-                          <div class="col-md-3">
-                            <div class="card mb-1">
-                              <img class="card-img-top" src="/media/{{movie.poster}}"
-                               alt="Card image cap">
-                              <div class="card-body">
-                                <p class="card-text">{{ movie.description }}</p>
-                                <div class="card-footer">
-                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                </div>
-                              </div>
+                    <div class="row">
+                      {% for movie in latest_slide_4 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
-                        {% endfor %}
+                        </div>
                       </div>
+                    {% endfor %}
                     </div>
+                  </div>
                 <!--/.Slides-->
 
               </div>
@@ -285,98 +311,127 @@
                 </div>
                 <!--/.Controls-->
 
-                <!--Slides-->
                 <div class="carousel-inner" role="listbox">
 
-                    <div class="carousel-inner" role="listbox">
+                  <!--First slide-->
+                  <div class="carousel-item active">
+                    <div class="row">
+                      {% for movie in action_slide_1 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
 
-                        <!--First slide-->
-                        <div class="carousel-item active">
-                          <div class="row">
-                            {% for movie in action_slide_1 %}
-                            <div class="col-md-3">
-                              <div class="card mb-1">
-                                <img class="card-img-top" src="/media/{{movie.poster}}" 
-                                alt="Card image cap">
-                                <div class="card-body">
-                                  <p class="card-text">{{ movie.description }}</p>
-                                  <div class="card-footer">
-                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                  </div>
-                                </div>
-                              </div>
+                                  </form>
                             </div>
-                          {% endfor %}
                           </div>
                         </div>
-                        <!--/.First slide-->
-      
-                        <!--Second slide-->
-                        <div class="carousel-item">
-                          <div class="row">
-                              {% for movie in action_slide_2 %}
-                              <div class="col-md-3">
-                                <div class="card mb-1">
-                                  <img class="card-img-top" src="/media/{{movie.poster}}"
-                                   alt="Card image cap">
-                                  <div class="card-body">
-                                    <p class="card-text">{{ movie.description }}</p>
-                                    <div class="card-footer">
-                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            {% endfor %}
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.First slide-->
+
+                  <!--Second slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in action_slide_2 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
+                            </div>
                           </div>
                         </div>
-                        <!--/.Second slide-->
-      
-                        <!--Third slide-->
-                        <div class="carousel-item">
-                            <div class="row">
-                                {% for movie in action_slide_3 %}
-                                <div class="col-md-3">
-                                  <div class="card mb-1">
-                                    <img class="card-img-top" src="/media/{{movie.poster}}"
-                                     alt="Card image cap">
-                                    <div class="card-body">
-                                      <p class="card-text">{{ movie.description }}</p>
-                                      <div class="card-footer">
-                                        <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              {% endfor %}
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.Second slide-->
+
+                  <!--Third slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in action_slide_3 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
-                        <!--/.Third slide-->
-      
-                        <!--Forth slide-->
-                        <div class="carousel-item">
-                            <div class="row">
-                                {% for movie in action_slide_4 %}
-                                <div class="col-md-3">
-                                  <div class="card mb-1">
-                                    <img class="card-img-top" src="/media/{{movie.poster}}"
-                                     alt="Card image cap">
-                                    <div class="card-body">
-                                      <p class="card-text">{{ movie.description }}</p>
-                                      <div class="card-footer">
-                                        <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              {% endfor %}
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.Third slide-->
+
+                  <!--Forth slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in action_slide_4 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
-                      <!--/.Slides-->
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                <!--/.Slides-->
 
               </div>
               <!--/.Carousel Wrapper-->
@@ -401,98 +456,125 @@
                 </div>
                 <!--/.Controls-->
 
-                <!--Slides-->
-                <div class="carousel-inner" role="listbox">
+                  <!--First slide-->
+                  <div class="carousel-item active">
+                    <div class="row">
+                      {% for movie in comedy_slide_1 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
 
-                    <div class="carousel-inner" role="listbox">
-
-                        <!--First slide-->
-                        <div class="carousel-item active">
-                          <div class="row">
-                            {% for movie in comedy_slide_1 %}
-                            <div class="col-md-3">
-                              <div class="card mb-1">
-                                <img class="card-img-top" src="/media/{{movie.poster}}" 
-                                alt="Card image cap">
-                                <div class="card-body">
-                                  <p class="card-text">{{ movie.description }}</p>
-                                  <div class="card-footer">
-                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                  </div>
-                                </div>
-                              </div>
+                                  </form>
                             </div>
-                          {% endfor %}
                           </div>
                         </div>
-                        <!--/.First slide-->
-      
-                        <!--Second slide-->
-                        <div class="carousel-item">
-                          <div class="row">
-                              {% for movie in comedy_slide_2 %}
-                              <div class="col-md-3">
-                                <div class="card mb-1">
-                                  <img class="card-img-top" src="/media/{{movie.poster}}"
-                                   alt="Card image cap">
-                                  <div class="card-body">
-                                    <p class="card-text">{{ movie.description }}</p>
-                                    <div class="card-footer">
-                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            {% endfor %}
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.First slide-->
+
+                  <!--Second slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in comedy_slide_2 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                   
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
+                            </div>
                           </div>
                         </div>
-                        <!--/.Second slide-->
-      
-                        <!--Third slide-->
-                        <div class="carousel-item">
-                            <div class="row">
-                                {% for movie in comedy_slide_3 %}
-                                <div class="col-md-3">
-                                  <div class="card mb-1">
-                                    <img class="card-img-top" src="/media/{{movie.poster}}"
-                                     alt="Card image cap">
-                                    <div class="card-body">
-                                      <p class="card-text">{{ movie.description }}</p>
-                                      <div class="card-footer">
-                                        <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              {% endfor %}
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.Second slide-->
+
+                  <!--Third slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in comedy_slide_3 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
-                        <!--/.Third slide-->
-      
-                        <!--Forth slide-->
-                        <div class="carousel-item">
-                            <div class="row">
-                                {% for movie in comedy_slide_4 %}
-                                <div class="col-md-3">
-                                  <div class="card mb-1">
-                                    <img class="card-img-top" src="/media/{{movie.poster}}"
-                                     alt="Card image cap">
-                                    <div class="card-body">
-                                      <p class="card-text">{{ movie.description }}</p>
-                                      <div class="card-footer">
-                                        <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                        <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              {% endfor %}
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.Third slide-->
+
+                  <!--Forth slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in comedy_slide_4 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
                           </div>
-                      <!--/.Slides-->
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                <!--/.Slides-->
 
               </div>
               <!--/.Carousel Wrapper-->
@@ -517,99 +599,125 @@
                 </div>
                 <!--/.Controls-->
 
-                <!--Slides-->
-                <div class="carousel-inner" role="listbox">
+                   <!--First slide-->
+                   <div class="carousel-item active">
+                    <div class="row">
+                      {% for movie in family_slide_1 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
 
-                  <!--First slide-->
-                  <div class="carousel-inner" role="listbox">
-
-                      <!--First slide-->
-                      <div class="carousel-item active" >
-                        <div class="row">
-                          {% for movie in family_slide_1 %}
-                          <div class="col-md-3">
-                            <div class="card mb-1">
-                              <img class="card-img-top" src="/media/{{movie.poster}}" 
-                              alt="Card image cap">
-                              <div class="card-body">
-                                <p class="card-text">{{ movie.description }}</p>
-                                <div class="card-footer">
-                                  <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                  <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                </div>
-                              </div>
+                                  </form>
                             </div>
                           </div>
-                        {% endfor %}
                         </div>
                       </div>
-                      <!--/.First slide-->
-    
-                      <!--Second slide-->
-                      <div class="carousel-item">
-                        <div class="row">
-                            {% for movie in family_slide_2 %}
-                            <div class="col-md-3">
-                              <div class="card mb-1">
-                                <img class="card-img-top" src="/media/{{movie.poster}}"
-                                 alt="Card image cap">
-                                <div class="card-body">
-                                  <p class="card-text">{{ movie.description }}</p>
-                                  <div class="card-footer">
-                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                  </div>
-                                </div>
-                              </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.First slide-->
+
+                  <!--Second slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in family_slide_2 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
                             </div>
-                          {% endfor %}
+                          </div>
                         </div>
                       </div>
-                      <!--/.Second slide-->
-    
-                      <!--Third slide-->
-                      <div class="carousel-item">
-                          <div class="row">
-                              {% for movie in family_slide_3 %}
-                              <div class="col-md-3">
-                                <div class="card mb-1">
-                                  <img class="card-img-top" src="/media/{{movie.poster}}"
-                                   alt="Card image cap">
-                                  <div class="card-body">
-                                    <p class="card-text">{{ movie.description }}</p>
-                                    <div class="card-footer">
-                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            {% endfor %}
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.Second slide-->
+
+                  <!--Third slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in family_slide_3 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
+                            </div>
                           </div>
                         </div>
-                      <!--/.Third slide-->
-    
-                      <!--Forth slide-->
-                      <div class="carousel-item">
-                          <div class="row">
-                              {% for movie in family_slide_4 %}
-                              <div class="col-md-3">
-                                <div class="card mb-1">
-                                  <img class="card-img-top" src="/media/{{movie.poster}}"
-                                   alt="Card image cap">
-                                  <div class="card-body">
-                                    <p class="card-text">{{ movie.description }}</p>
-                                    <div class="card-footer">
-                                      <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            {% endfor %}
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <!--/.Third slide-->
+
+                  <!--Forth slide-->
+                  <div class="carousel-item">
+                    <div class="row">
+                      {% for movie in family_slide_4 %}
+                      <div class="col-md-3">
+                        <div class="card mb-1">
+                          <img class="card-img-top" src="/media/{{movie.poster}}" 
+                          alt="Card image cap">
+                          <div class="card-body">
+                            <p class="card-text"  >{{ movie.description }}</p>
+                            <div class="card-footer">
+                                <form action="{% url 'store:store-book' %}" method="POST">
+                                    {% csrf_token %}
+                                    <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                    {% if user.is_authenticated%}
+                                    <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                    {% endif %}                                    
+                                    <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                    <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                                  </form>
+                            </div>
                           </div>
                         </div>
-                    <!--/.Slides-->
+                      </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+  
 
               </div>
               <!--/.Carousel Wrapper-->
@@ -639,26 +747,33 @@
 
                     <div class="carousel-inner" role="listbox">
 
-                        <!--First slide-->
-                        <div class="carousel-item active">
-                          <div class="row">
-                            {% for movie in horror_slide_1 %}
-                            <div class="col-md-3">
-                              <div class="card mb-1">
-                                <img class="card-img-top" src="/media/{{movie.poster}}" 
-                                alt="Card image cap">
-                                <div class="card-body">
-                                  <p class="card-text">{{ movie.description }}</p>
-                                  <div class="card-footer">
-                                    <button class="btn btn-outline-light my-2 my-sm-0" data-target="#myModal" data-toggle="modal" type="submit"> View</button>
-                                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> Rent</button>
-                                  </div>
+                      <div class="carousel-item active">
+                        <div class="row">
+                          {% for movie in horror_slide_1 %}
+                          <div class="col-md-3">
+                            <div class="card mb-1">
+                              <img class="card-img-top" src="/media/{{movie.poster}}" 
+                              alt="Card image cap">
+                              <div class="card-body">
+                                <p class="card-text"  >{{ movie.description }}</p>
+                                <div class="card-footer">
+                                    <form action="{% url 'store:store-book' %}" method="POST">
+                                        {% csrf_token %}
+                                        <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                                        {% if user.is_authenticated%}
+                                        <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your rental of {{movie.originalTitle}} has been successful!')" type="submit"> Rent</button>
+                                        {% endif %}                                        
+                                        <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                                        <input name="movie_id" value="{{movie.ID}}" hidden="" >
+    
+                                      </form>
                                 </div>
                               </div>
                             </div>
-                          {% endfor %}
                           </div>
+                        {% endfor %}
                         </div>
+                      </div>
                         <!--/.First slide-->
     
                       <!--/.Slides-->

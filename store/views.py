@@ -20,15 +20,15 @@ from .models import BookedProduct
 def home(request):
 
 
-    latest_slide_1 = Product.objects.filter(genres__icontains='Action', isBooked=False)[0:4]
+    latest_slide_1 = Product.objects.filter(genres__icontains='Family', isBooked=False)[0:4]
     latest_slide_2 = Product.objects.filter(genres__icontains='Comedy', isBooked=False)[0:4]
-    latest_slide_3 = Product.objects.filter(genres__icontains='Family', isBooked=False)[0:4]
+    latest_slide_3 = Product.objects.filter(genres__icontains='Action', isBooked=False)[0:4]
     latest_slide_4 = Product.objects.filter(genres__icontains='Horror', isBooked=False)[0:4]
 
     action_slide_1 = Product.objects.filter(genres__icontains='Action', isBooked=False)[0:4]
     action_slide_2 = Product.objects.filter(genres__icontains='Action', isBooked=False)[5:9]
-    action_slide_3 = Product.objects.filter(genres__icontains='Action', isBooked=False)[8:12]
-    action_slide_4 = Product.objects.filter(genres__icontains='Action', isBooked=False)[12:16]
+    action_slide_3 = Product.objects.filter(genres__icontains='Action', isBooked=False)[9:13]
+    action_slide_4 = Product.objects.filter(genres__icontains='Action', isBooked=False)[13:17]
 
     comedy_slide_1 = Product.objects.filter(genres__icontains='Comedy', isBooked=False)[0:4]
     comedy_slide_2 = Product.objects.filter(genres__icontains='Comedy', isBooked=False)[4:8]
@@ -133,26 +133,35 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect("/")
 
-    #return render(request, 'store/home.html')
 
 def user_rentals(request):
-
-    movies = BookedProduct.objects.filter(ID=User.id)
+    rented_movies = BookedProduct.objects.all()
+    movie_list = []
+    for x in rented_movies:
+        if (request.user == x.username):
+            movie_list.append(x.ID)
     args = {
-        'rented_movies':movies
+        'movie_list':movie_list
     }
     return render(request,"store/rentalsPage.html", args) 
 
 
 def book(request):
-    print("check")
-    if request.method == "POST":
-        movie_id = request.POST['movie_id']
-        movie = Product.objects.filter(ID= movie_id).update(isBooked=True)
-        print("\n\n\n\n\n\n\n" + movie_id + "\n\n\n\n\n\n")
-        rented_movie = BookedProduct()
-        rented_movie.ID_id = movie
-        rented_movie.username_id = User.username
-        rented_movie.save(force_insert=True)
-        movie.save()
+    movie_name = request.POST.get('movie_name',"")
+    movie_id = request.POST.get('movie_id',"")
+    movie = Product.objects.get(originalTitle= movie_name)
+    movie.isBooked = True
+    rented_movie = BookedProduct.objects.create(ID=movie, username=request.user)
+    rented_movie.save()
+    movie.save()
     return HttpResponseRedirect("/")
+
+def user_returns(request):
+    movie_name = request.POST.get('movie_name',"")
+    movie_id = request.POST.get('movie_id',"")
+    movie = Product.objects.get(originalTitle= movie_name)
+    movie.isBooked = False
+    rented_movie = BookedProduct.objects.get(ID=movie, username=request.user)
+    rented_movie.delete()
+    movie.save()
+    return HttpResponseRedirect("/rentals")

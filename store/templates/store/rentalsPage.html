@@ -19,7 +19,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-md navbar-dark and bg-dark sticky-top">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#"><img src="{% static 'img/ProjLogo-01.png' %}"></a>
+		<a class="navbar-brand" href="/"><img src="{% static 'img/ProjLogo-01.png' %}"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -30,32 +30,45 @@
 		</form>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+					<a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
 				</li>
 				<li class="nav-item">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"><i class="fas fa-user-circle"></i>  Hi {{ user.username }}!</a>
         </li>
 				<li class="nav-item">
-            <a class="nav-link" href="#"><i class="fas fa-home"></i> Sign out</a>
+            <a class="nav-link" href="logout"><i class="fas fa-home"></i> Sign out</a>
           </li>
 			</ul>
 		</div>
 	</div>
 </nav>
 
-<div class="row">
-    {% for movie in rentals %}
-    <div class="col-md-3">
-      <div class="card mb-1">
-        <img class="card-img-top" src="/media/{{movie.poster}}" 
-        alt="Card image cap">
-        <div class="card-body">
-          <p class="card-text">{{ movie.description }}</p>
+  <div class="row">
+      {% for movie in movie_list %}
+      <div class="col-md-3">
+        <div class="card mb-1">
+          <img class="card-img-top" src="/media/{{movie.poster}}"
+           alt="Card image cap">
+          <div class="card-body">
+            <p class="card-text">{{ movie.description }}</p>
+            <div class="card-footer">
+              <form action="{% url 'store:user_returns' %}"method="POST">
+                  {% csrf_token %}
+                  <label class="btn btn-outline-light my-2 my-sm-0"  type="label">Price : {{movie.price}}</label>
+                  <button class="btn btn-outline-light my-2 my-sm-0" onclick="alert('Your return of {{movie.originalTitle}} has been successful!')" type="submit"> Return</button>
+                  <input name="movie_name" value="{{movie.originalTitle}}" hidden="" >
+                  <input name="movie_id" value="{{movie.ID}}" hidden="" >
+
+                </form>
+          </div>
+          </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
+      {% empty %}
+    <p>You currently have no movies rented.</p>
+     {% endfor %}
   </div>
+
 
 
 
